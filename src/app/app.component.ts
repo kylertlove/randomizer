@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ElectronService} from 'ngx-electron';
-import {MdSnackBar} from '@angular/material';
+import { MdSnackBar, MdDialog } from '@angular/material';
+import { AboutComponent } from "./about/about.component";
 
 @Component({
   selector: 'app-root',
@@ -14,10 +15,13 @@ export class AppComponent implements OnInit {
   classes;
   newName;
   newClass;
-  constructor(private electronService:ElectronService, public snackBar: MdSnackBar){}
+  audio = [];
+  constructor(private electronService:ElectronService, public snackBar: MdSnackBar, public dialog: MdDialog){}
 
   ngOnInit() {
     this.getStudents();
+    this.audio = this.electronService.ipcRenderer.sendSync('getSounds', 'ping');
+    console.log(this.audio);
   }
 
   getStudents = () => {
@@ -58,6 +62,7 @@ export class AppComponent implements OnInit {
   }
 
   addClass = () => {
+
     if(!this.newClass || this.newClass == ''){
       this.openSnackBar("Enter a class name");
     }else{
@@ -82,6 +87,24 @@ export class AppComponent implements OnInit {
     this.snackBar.open(line, "OK", {
       duration: 3000
     });
+  }
+
+  drumRoll = () => {
+    let audio = new Audio();
+    audio.src = this.audio[0];
+    audio.load();
+    audio.play();
+  }
+
+  needHelp = () => {
+    this.dialog.open(AboutComponent, {
+      height: '400px',
+      width: '600px',
+    });
+  }
+
+  editData = () => {
+
   }
 }
 

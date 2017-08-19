@@ -11,7 +11,7 @@ let win;
 
 function createWindow() {
     // Create the browser window.
-    win = new BrowserWindow({ width: 1000, height: 600 });
+    win = new BrowserWindow({ width: 1100, height: 700 });
 
     // and load the index.html of the app.
     win.loadURL(`file://${__dirname}/index.html`);
@@ -82,3 +82,7 @@ ipc.on('addClass', function(event, arg) {
         }
     });
 });
+
+ipc.on('getSounds', function(event, args) {
+    event.returnValue = [`${__dirname}/assets/sounds/drumroll.mp3`];
+})
