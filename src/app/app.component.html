@@ -1,0 +1,44 @@
+<md-toolbar color="primary" class="headerTop">
+    <div style="text-align:center">
+        <span>{{title}}</span>
+    </div>
+</md-toolbar>
+<div class="row">
+    <div class="col-5">
+        <md-tab-group style="margin-top:5%;">
+            <md-tab label="Add Student">
+                <div>
+                    <md-toolbar style="margin-top:5%;">
+                        <md-input-container>
+                            <input mdInput color="primary" placeholder="Name" [(ngModel)]="newName" />
+                        </md-input-container>
+                    </md-toolbar>
+                    <button md-raised-button color="primary" class="right" (click)="addStudent()">Add Student</button>
+                </div>
+            </md-tab>
+            <md-tab label="Add Class">
+                <div>
+                    <md-toolbar style="margin-top:5%;">
+                        <md-input-container>
+                            <input mdInput color="primary" placeholder="Class Name" [(ngModel)]="newClass" />
+                        </md-input-container>
+                    </md-toolbar>
+                    <button md-raised-button color="primary" class="right" (click)="addClass()">Add Class</button>
+                </div>
+            </md-tab>
+        </md-tab-group>
+        <div *ngIf="classes">
+            <md-radio-group style="margin-top:10%;" class="example-radio-group" [(ngModel)]="selectedClass">
+                <md-radio-button class="example-radio-button" *ngFor="let classs of classes" [value]="classs">
+                    {{classs[0]}}
+                    <button class="right" (click)="removeClass(classs)" style="transform: scale(.6);" md-mini-fab><md-icon>X</md-icon></button>
+                </md-radio-button>
+            </md-radio-group>
+        </div>
+    </div>
+    <div class="col-7">
+        <ul *ngIf="selectedClass && selectedClass.length > 0">
+            <li *ngFor="let cls of selectedClass[1]">{{cls}}</li>
+        </ul>
+    </div>
+</div>
