@@ -11,17 +11,19 @@ import { AboutComponent } from "./about/about.component";
 export class AppComponent implements OnInit {
  
   title = 'Student Randomizer';
-  selectedClass:string[];
+  selectedClass;
   classes;
   newName;
   newClass;
   audio = [];
+  toggleView = 0;
+  selectedRandomNum;
+  groupAmount = [1, 2, 3, 4];
   constructor(private electronService:ElectronService, public snackBar: MdSnackBar, public dialog: MdDialog){}
 
   ngOnInit() {
     this.getStudents();
     this.audio = this.electronService.ipcRenderer.sendSync('getSounds', 'ping');
-    console.log(this.audio);
   }
 
   getStudents = () => {
@@ -62,7 +64,6 @@ export class AppComponent implements OnInit {
   }
 
   addClass = () => {
-
     if(!this.newClass || this.newClass == ''){
       this.openSnackBar("Enter a class name");
     }else{
@@ -102,9 +103,65 @@ export class AppComponent implements OnInit {
       width: '600px',
     });
   }
+  randomView = () => {
+    this.toggleView = 2;
+  }
 
   editData = () => {
-
+    this.toggleView = 1;
   }
+  saveEdits = (index, changedName) => {
+    if(this.electronService.isElectronApp){
+      let pong:string = this.electronService.ipcRenderer.sendSync('addStudent', JSON.stringify(this.classes));
+      if(pong == 'Y'){
+        this.openSnackBar("Saved Students!");
+      }
+    }
+    this.toggleView = 0;
+  }
+
+  trackByFn(index: any, item: any) {
+    return index;
+  }
+
+  shuffle() {
+    let array = [];
+    array = this.selectedClass[1];
+    let currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
+  }
+
+  randomizeData = () => {
+    switch(this.selectedRandomNum){
+      case(1):
+        let newArr = this.shuffle();
+        console.log(newArr);
+      break;
+      case(2):
+      console.log("2");
+      break;
+      case(3):
+      console.log("3");
+      break;
+      case(4):
+      console.log("4");
+      break;
+    }
+  }
+
 }
 

@@ -7,6 +7,8 @@
             <i class="fa fa-question-circle-o fa-2x"></i></button>
         <button md-mini-fab style="margin-left:10%;" (click)="editData()">
             <i class="fa fa-pencil fa-2x"></i></button>
+        <button md-mini-fab style="margin-left:10%;" (click)="randomView()">
+                    <i class="fa fa-random fa-2x"></i></button>
     </div>
 </md-toolbar>
 <div class="row">
@@ -43,9 +45,34 @@
             </md-radio-group>
         </div>
     </div>
-    <div class="col-6">
-        <ul *ngIf="selectedClass && selectedClass.length > 0">
-            <li *ngFor="let cls of selectedClass[1]">{{cls}}</li>
-        </ul>
+    <div class="col-6" style="margin-top:5%;">
+        <div *ngIf="selectedClass && selectedClass.length > 0">
+            <div *ngIf="toggleView == 0">
+                <ul class="lists">
+                    <li *ngFor="let listName of selectedClass[1]">{{listName}}</li>
+                </ul>
+            </div>
+            <div *ngIf="toggleView == 1">
+                <ul class="lists">
+                    <li *ngFor="let editName of selectedClass[1]; let i = index; trackBy:trackByFn">
+                        <md-input-container>
+                            <input mdInput color="primary" placeholder="Name" [(ngModel)]="selectedClass[1][i]" />
+                        </md-input-container>
+                        <button md-mini-fab style="margin-left:10%;" (click)="saveEdits(i, editName)">
+                            <i class="fa fa-check"></i></button>
+                    </li>
+                </ul>
+            </div>
+            <div *ngIf="toggleView == 2">
+                <md-select placeholder="Group of Students" [(ngModel)]="selectedRandomNum">
+                    <md-option *ngFor="let rand of groupAmount" [value]="rand">
+                        {{rand}}
+                    </md-option>
+                </md-select>
+                <button md-raised-button color="primary" style="margin-left:20px;" class="right" (click)="randomizeData()">
+                        <i class="fa fa-user-plus"></i>
+                        Randomize Students</button>
+            </div>
+        </div>
     </div>
 </div>

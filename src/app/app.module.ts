@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {MdButtonModule, MdCheckboxModule, MdToolbarModule, MdRadioModule,
-   MdSnackBarModule, MdGridListModule, MdInputModule, MdTabsModule, MdCardModule, MdDialogModule } from '@angular/material';
+   MdSnackBarModule, MdGridListModule, MdInputModule, MdTabsModule, MdCardModule,
+    MdDialogModule, MdSelectModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
 import {NgxElectronModule} from 'ngx-electron';
@@ -17,7 +18,7 @@ import { AboutComponent } from './about/about.component';
   imports: [
     BrowserModule, MdButtonModule, MdCheckboxModule, HttpModule, NgxElectronModule, MdToolbarModule, MdGridListModule,
     MdSnackBarModule, BrowserAnimationsModule, MdInputModule, FormsModule, MdRadioModule, MdTabsModule, MdCardModule, 
-    MdDialogModule
+    MdDialogModule, MdSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent],
