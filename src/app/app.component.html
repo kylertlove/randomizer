@@ -3,11 +3,11 @@
         <span style="margin-right:30%;">{{title}}</span>
     </div>
     <div class="right">
-        <button md-mini-fab style="margin-left:10%;" (click)="needHelp()">
+        <button md-mini-fab style="margin-left:10%;" (click)="needHelp()" mdTooltip="Help">
             <i class="fa fa-question-circle-o fa-2x"></i></button>
-        <button md-mini-fab style="margin-left:10%;" (click)="editData()">
+        <button md-mini-fab style="margin-left:10%;" (click)="editData()" mdTooltip="Edit Students/Classes">
             <i class="fa fa-pencil fa-2x"></i></button>
-        <button md-mini-fab style="margin-left:10%;" (click)="randomView()">
+        <button md-mini-fab style="margin-left:10%;" (click)="randomView()" mdTooltip="Randomize">
                     <i class="fa fa-random fa-2x"></i></button>
     </div>
 </md-toolbar>
@@ -21,7 +21,7 @@
                             <input mdInput color="primary" placeholder="Name" [(ngModel)]="newName" />
                         </md-input-container>
                     </md-toolbar>
-                    <button md-raised-button color="primary" class="right" (click)="addStudent()">
+                    <button md-raised-button color="primary" class="right" (click)="addStudent()" mdTooltip="Add Student to class">
                         <i class="fa fa-user-plus" style="margin-right:3px;"></i>
                         Add Student</button>
                 </div>
@@ -33,45 +33,100 @@
                             <input mdInput color="primary" placeholder="Class Name" [(ngModel)]="newClass" />
                         </md-input-container>
                     </md-toolbar>
-                    <button md-raised-button color="primary" class="right" (click)="addClass()">Add Class</button>
+                    <button md-raised-button color="primary" class="right" (click)="addClass()" mdTooltip="Create Class">
+                            <i class="fa fa-users" style="margin-right:3px;" aria-hidden="true"></i>
+                        Add Class</button>
                 </div>
             </md-tab>
         </md-tab-group>
         <div *ngIf="classes">
-            <md-radio-group style="margin-top:10%;" class="example-radio-group" [(ngModel)]="selectedClass">
+            <md-radio-group style="margin-top:10%;" class="example-radio-group" [(ngModel)]="selectedClass" (change)="toggleView = 0">
                 <md-radio-button class="example-radio-button" *ngFor="let classs of classes" [value]="classs">
                     {{classs[0]}}
                 </md-radio-button>
             </md-radio-group>
         </div>
     </div>
-    <div class="col-6" style="margin-top:5%;">
+    <div class="col-6 listAndEdit" style="margin-top:10px;">
         <div *ngIf="selectedClass && selectedClass.length > 0">
             <div *ngIf="toggleView == 0">
-                <ul class="lists">
-                    <li *ngFor="let listName of selectedClass[1]">{{listName}}</li>
-                </ul>
+                <h3><i class="fa fa-users" style="margin-right:3px;" aria-hidden="true"></i>{{selectedClass[0]}}</h3>
+                <md-card *ngFor="let listName of selectedClass[1]" class="groupCards">
+                    <i class="fa fa-user" style="margin-right:3px;" aria-hidden="true"></i> {{listName}}
+                </md-card>
             </div>
             <div *ngIf="toggleView == 1">
+                <i class="fa fa-users" style="margin-right:3px;" aria-hidden="true"></i>
+                <md-input-container>
+                    <input mdInput color="primary" placeholder="Class Name" [(ngModel)]="selectedClass[0]" />
+                </md-input-container>
+                <button md-mini-fab style="margin-left:10%;" (click)="saveEdits(i, editName)" mdTooltip="Save Class Name">
+                        <i class="fa fa-check"></i></button>
+                <button md-mini-fab style="margin-left:10%;" (click)="removeClass()" mdTooltip="Remove This Whole Class">X</button>
                 <ul class="lists">
                     <li *ngFor="let editName of selectedClass[1]; let i = index; trackBy:trackByFn">
+                        <i class="fa fa-user" style="margin-right:3px;" aria-hidden="true"></i>
                         <md-input-container>
                             <input mdInput color="primary" placeholder="Name" [(ngModel)]="selectedClass[1][i]" />
                         </md-input-container>
-                        <button md-mini-fab style="margin-left:10%;" (click)="saveEdits(i, editName)">
+                        <button md-mini-fab style="margin-left:10%;" (click)="saveEdits(i, editName)" mdTooltip="Save Student">
                             <i class="fa fa-check"></i></button>
+                        <button md-mini-fab style="margin-left:10%;" (click)="removeStudent(i)" mdTooltip="Remove This Student">X</button>
                     </li>
                 </ul>
             </div>
             <div *ngIf="toggleView == 2">
-                <md-select placeholder="Group of Students" [(ngModel)]="selectedRandomNum">
-                    <md-option *ngFor="let rand of groupAmount" [value]="rand">
-                        {{rand}}
-                    </md-option>
-                </md-select>
-                <button md-raised-button color="primary" style="margin-left:20px;" class="right" (click)="randomizeData()">
-                        <i class="fa fa-user-plus"></i>
-                        Randomize Students</button>
+                <div class="col-12">
+                    <div class="row">
+                        <md-select placeholder="# of students grouped" [(ngModel)]="selectedRandomNum">
+                            <md-option *ngFor="let rand of groupAmount" [value]="rand">
+                                {{rand}}
+                            </md-option>
+                        </md-select>
+                        <button md-raised-button color="primary" style="margin-left:20px;" class="right" (click)="randomizeData()" mdTooltip="Shuffle the list of students">
+                                    <i class="fa fa-random"></i>
+                                    Randomize</button>
+                        <md-checkbox [(ngModel)]="skipDrumRoll" mdTooltip="Check to skip drum roll">Quick Group</md-checkbox>
+                    </div>
+                </div>
+                <div *ngIf="selectedRandomNum == 1">
+                    <div class="col-12" *ngIf="presentArray && presentArray.length > 0">
+                        <md-card *ngFor="let item of presentArray" class="groupCards">{{item}}</md-card>
+                    </div>
+                </div>
+                <div *ngIf="selectedRandomNum == 2">
+                    <div class="col-12" *ngIf="prePresentArray && prePresentArray.length > 0">
+                        <button md-raised-button color="primary" style="margin-left:20px;" class="right" (click)="getNextGroup(2)" mdTooltip="Get the next group">
+                                <i class="fa fa-arrow-right"></i>
+                                Get Next Partners</button>
+                        <br>
+                        <div class="col-12">
+                            <md-card *ngFor="let item of presentArray" class="groupCards">{{item}}</md-card>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="selectedRandomNum == 3">
+                    <div class="col-12" *ngIf="prePresentArray && prePresentArray.length > 0">
+                        <button md-raised-button color="primary" style="margin-left:20px;" class="right" (click)="getNextGroup(3)" mdTooltip="Get the next group">
+                                        <i class="fa fa-arrow-right"></i>
+                                        Get Next Partners</button>
+                        <br>
+                        <div class="col-12">
+                            <md-card *ngFor="let item of presentArray" class="groupCards">{{item}}</md-card>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="selectedRandomNum == 4">
+                    <div class="col-12" *ngIf="prePresentArray && prePresentArray.length > 0">
+                        <button md-raised-button color="primary" style="margin-left:20px;" class="right" (click)="getNextGroup(4)" mdTooltip="Get the next group">
+                                        <i class="fa fa-arrow-right"></i>
+                                        Get Next Partners</button>
+                        <br>
+                        <div class="col-12">
+                            <md-card *ngFor="let item of presentArray" class="groupCards">{{item}}</md-card>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

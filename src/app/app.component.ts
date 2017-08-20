@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ElectronService} from 'ngx-electron';
 import { MdSnackBar, MdDialog } from '@angular/material';
 import { AboutComponent } from "./about/about.component";
+import { TeamsComponent } from "./teams/teams.component";
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,9 @@ export class AppComponent implements OnInit {
   toggleView = 0;
   selectedRandomNum;
   groupAmount = [1, 2, 3, 4];
+  presentArray = [];
+  prePresentArray = [];
+  skipDrumRoll;
   constructor(private electronService:ElectronService, public snackBar: MdSnackBar, public dialog: MdDialog){}
 
   ngOnInit() {
@@ -80,8 +84,30 @@ export class AppComponent implements OnInit {
     }
   }
 
-  removeClass = (classs) => {
-    console.log(classs);
+  removeClass = () => {
+    for (let i = 0; i < this.classes.length; i++) {
+      if (this.selectedClass[0] == this.classes[i][0]) {
+        this.classes.splice(i, 1);
+        let pong: string = this.electronService.ipcRenderer.sendSync('addStudent', JSON.stringify(this.classes));
+        if (pong == 'Y') {
+          this.openSnackBar("Class Removed!");
+        }
+        this.toggleView = 0;
+        if (this.classes.length > 0) {
+          this.selectedClass = this.classes[0];
+        } else {
+          this.selectedClass = null;
+        }
+      }
+    }
+  }
+
+  removeStudent = (index) => {
+    this.selectedClass[1].splice(index, 1);
+    let pong:string = this.electronService.ipcRenderer.sendSync('addStudent', JSON.stringify(this.classes));
+    if(pong == 'Y'){
+      this.openSnackBar("Student Removed!");
+    }
   }
 
   openSnackBar = (line) => {
@@ -108,7 +134,12 @@ export class AppComponent implements OnInit {
   }
 
   editData = () => {
-    this.toggleView = 1;
+    if(this.toggleView != 1){
+      this.toggleView = 1;
+    }else{
+      this.toggleView = 0;
+    }
+    
   }
   saveEdits = (index, changedName) => {
     if(this.electronService.isElectronApp){
@@ -117,51 +148,81 @@ export class AppComponent implements OnInit {
         this.openSnackBar("Saved Students!");
       }
     }
-    this.toggleView = 0;
   }
 
   trackByFn(index: any, item: any) {
     return index;
   }
 
-  shuffle() {
+  shuffle(selected) {
     let array = [];
-    array = this.selectedClass[1];
+    array = selected.slice();
     let currentIndex = array.length, temporaryValue, randomIndex;
-  
-    // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-  
-      // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
-  
-      // And swap it with the current element.
       temporaryValue = array[currentIndex];
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
     }
-  
     return array;
   }
 
   randomizeData = () => {
+    this.prePresentArray = [];
+    this.presentArray = [];
     switch(this.selectedRandomNum){
       case(1):
-        let newArr = this.shuffle();
-        console.log(newArr);
+        let newArr = this.shuffle(this.selectedClass[1]);
+        if(this.skipDrumRoll){
+          this.presentArray = newArr;
+        }else{
+          this.drumRoll();
+          setTimeout(() => {
+            this.presentArray = newArr;
+          }, 2300);
+        }
       break;
       case(2):
-      console.log("2");
+        this.prePresentArray = this.shuffle(this.selectedClass[1]); 
       break;
       case(3):
-      console.log("3");
+      this.prePresentArray = this.shuffle(this.selectedClass[1]);
       break;
       case(4):
-      console.log("4");
+      this.prePresentArray = this.shuffle(this.selectedClass[1]);
       break;
     }
   }
 
+  getNextGroup = (num) => {
+    let newIndex = this.presentArray.length * num;
+    let combinedNames = "";
+    if(newIndex < this.prePresentArray.length){
+      for (let index = newIndex; index < (newIndex + num); index++) {
+        if(combinedNames == ""){
+          combinedNames += this.prePresentArray[index];
+        }else{
+          if(this.prePresentArray[index]){
+            combinedNames += " & " + this.prePresentArray[index];
+          }
+        }
+    }
+    if(this.skipDrumRoll){
+      this.presentArray.push(combinedNames);
+    }else{
+      this.drumRoll();
+      setTimeout(() => {
+        this.dialog.open(TeamsComponent, {
+          data: combinedNames,
+          panelClass: 'panelClass',
+          height: '200px',
+          width: '800px',
+        });
+        this.presentArray.push(combinedNames);
+      }, 1700);
+    }
+    }
+  }
 }
 
