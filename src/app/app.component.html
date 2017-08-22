@@ -89,42 +89,9 @@
                         <md-checkbox [(ngModel)]="skipDrumRoll" mdTooltip="Check to skip drum roll">Quick Group</md-checkbox>
                     </div>
                 </div>
-                <div *ngIf="selectedRandomNum == 1">
+                <div>
                     <div class="col-12" *ngIf="presentArray && presentArray.length > 0">
                         <md-card *ngFor="let item of presentArray" class="groupCards">{{item}}</md-card>
-                    </div>
-                </div>
-                <div *ngIf="selectedRandomNum == 2">
-                    <div class="col-12" *ngIf="prePresentArray && prePresentArray.length > 0">
-                        <button md-raised-button color="primary" style="margin-left:20px;" class="right" (click)="getNextGroup(2)" mdTooltip="Get the next group">
-                                <i class="fa fa-arrow-right"></i>
-                                Get Next Partners</button>
-                        <br>
-                        <div class="col-12">
-                            <md-card *ngFor="let item of presentArray" class="groupCards">{{item}}</md-card>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="selectedRandomNum == 3">
-                    <div class="col-12" *ngIf="prePresentArray && prePresentArray.length > 0">
-                        <button md-raised-button color="primary" style="margin-left:20px;" class="right" (click)="getNextGroup(3)" mdTooltip="Get the next group">
-                                        <i class="fa fa-arrow-right"></i>
-                                        Get Next Partners</button>
-                        <br>
-                        <div class="col-12">
-                            <md-card *ngFor="let item of presentArray" class="groupCards">{{item}}</md-card>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="selectedRandomNum == 4">
-                    <div class="col-12" *ngIf="prePresentArray && prePresentArray.length > 0">
-                        <button md-raised-button color="primary" style="margin-left:20px;" class="right" (click)="getNextGroup(4)" mdTooltip="Get the next group">
-                                        <i class="fa fa-arrow-right"></i>
-                                        Get Next Partners</button>
-                        <br>
-                        <div class="col-12">
-                            <md-card *ngFor="let item of presentArray" class="groupCards">{{item}}</md-card>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -21,7 +21,6 @@ export class AppComponent implements OnInit {
   selectedRandomNum;
   groupAmount = [1, 2, 3, 4];
   presentArray = [];
-  prePresentArray = [];
   skipDrumRoll;
   constructor(private electronService:ElectronService, public snackBar: MdSnackBar, public dialog: MdDialog){}
 
@@ -169,7 +168,6 @@ export class AppComponent implements OnInit {
   }
 
   randomizeData = () => {
-    this.prePresentArray = [];
     this.presentArray = [];
     switch(this.selectedRandomNum){
       case(1):
@@ -184,45 +182,65 @@ export class AppComponent implements OnInit {
         }
       break;
       case(2):
-        this.prePresentArray = this.shuffle(this.selectedClass[1]); 
+      let newArr2 = this.shuffle(this.selectedClass[1]); 
+      newArr2 = this.getNextGroup(newArr2, 2);
+        if(this.skipDrumRoll){
+          this.presentArray = newArr2;
+        }else{
+          this.drumRoll();
+          setTimeout(() => {
+            this.presentArray = newArr2;
+          }, 2300);
+        }
       break;
       case(3):
-      this.prePresentArray = this.shuffle(this.selectedClass[1]);
+      let newArr3 = this.shuffle(this.selectedClass[1]);
+      newArr3 = this.getNextGroup(newArr3, 3);
+      if(this.skipDrumRoll){
+        this.presentArray = newArr3;
+      }else{
+        this.drumRoll();
+        setTimeout(() => {
+          this.presentArray = newArr3;
+        }, 2300);
+      }
       break;
       case(4):
-      this.prePresentArray = this.shuffle(this.selectedClass[1]);
+      let newArr4 = this.shuffle(this.selectedClass[1]);
+      newArr4 = this.getNextGroup(newArr4, 4);
+      if(this.skipDrumRoll){
+        this.presentArray = newArr4;
+      }else{
+        this.drumRoll();
+        setTimeout(() => {
+          this.presentArray = newArr4;
+        }, 2300);
+      }
       break;
     }
   }
 
-  getNextGroup = (num) => {
-    let newIndex = this.presentArray.length * num;
+  getNextGroup = (arr, num) => {
+    let groupedArr = [];
     let combinedNames = "";
-    if(newIndex < this.prePresentArray.length){
-      for (let index = newIndex; index < (newIndex + num); index++) {
-        if(combinedNames == ""){
-          combinedNames += this.prePresentArray[index];
-        }else{
-          if(this.prePresentArray[index]){
-            combinedNames += " & " + this.prePresentArray[index];
-          }
-        }
+    let foundNum = 1;
+
+    for(let i = 0; i < arr.length; i++){
+      if(combinedNames == ""){
+        combinedNames += arr[i];
+      }else{
+        combinedNames += " & " + arr[i];
+      }
+      if(foundNum == num){
+        groupedArr.push(combinedNames);
+        combinedNames = "";
+        foundNum = 0;
+      }else if(i == arr.length - 1){
+        groupedArr.push(combinedNames);
+      }
+      foundNum++;
     }
-    if(this.skipDrumRoll){
-      this.presentArray.push(combinedNames);
-    }else{
-      this.drumRoll();
-      setTimeout(() => {
-        this.dialog.open(TeamsComponent, {
-          data: combinedNames,
-          panelClass: 'panelClass',
-          height: '200px',
-          width: '800px',
-        });
-        this.presentArray.push(combinedNames);
-      }, 1700);
-    }
-    }
+    return groupedArr;
   }
 }
 
