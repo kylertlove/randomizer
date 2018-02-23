@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ElectronService} from 'ngx-electron';
-import { MdSnackBar, MdDialog } from '@angular/material';
 import { AboutComponent } from "./about/about.component";
 import { TeamsComponent } from "./teams/teams.component";
+import { MatSnackBar, MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -18,11 +18,11 @@ export class AppComponent implements OnInit {
   newClass;
   audio = [];
   toggleView = 0;
-  selectedRandomNum;
+  selectedRandomNum: number;
   groupAmount = [1, 2, 3, 4];
   presentArray = [];
   skipDrumRoll;
-  constructor(private electronService:ElectronService, public snackBar: MdSnackBar, public dialog: MdDialog){}
+  constructor(private electronService:ElectronService, public snackBar: MatSnackBar, public dialog: MatDialog){}
 
   ngOnInit() {
     this.getStudents();
@@ -126,6 +126,7 @@ export class AppComponent implements OnInit {
     this.dialog.open(AboutComponent, {
       height: '400px',
       width: '600px',
+      disableClose: false
     });
   }
   randomView = () => {
@@ -138,7 +139,6 @@ export class AppComponent implements OnInit {
     }else{
       this.toggleView = 0;
     }
-    
   }
   saveEdits = (index, changedName) => {
     if(this.electronService.isElectronApp){

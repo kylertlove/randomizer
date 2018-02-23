@@ -1,97 +1,108 @@
-<md-toolbar color="primary" class="headerTop">
+<mat-toolbar color="primary" class="headerTop">
     <div>
         <span style="margin-right:30%;">{{title}}</span>
     </div>
     <div class="right">
-        <button md-mini-fab style="margin-left:10%;" (click)="needHelp()" mdTooltip="Help">
-            <i class="fa fa-question-circle-o fa-2x"></i></button>
-        <button md-mini-fab style="margin-left:10%;" (click)="editData()" mdTooltip="Edit Students/Classes">
-            <i class="fa fa-pencil fa-2x"></i></button>
-        <button md-mini-fab style="margin-left:10%;" (click)="randomView()" mdTooltip="Randomize">
-                    <i class="fa fa-random fa-2x"></i></button>
+        <button mat-mini-fab style="margin-left:10%;" (click)="needHelp()" matTooltip="Help">
+            <i class="fa fa-question-circle-o fa-2x"></i>
+        </button>
+        <button mat-mini-fab style="margin-left:10%;" (click)="editData()" matTooltip="Edit Students/Classes">
+            <i class="fa fa-pencil fa-2x"></i>
+        </button>
+        <button mat-mini-fab style="margin-left:10%;" (click)="randomView()" matTooltip="Randomize">
+            <i class="fa fa-random fa-2x"></i>
+        </button>
     </div>
-</md-toolbar>
+</mat-toolbar>
 <div class="row">
     <div class="col-5 editCard">
-        <md-tab-group style="margin-top:5%;">
-            <md-tab label="Add Student">
+        <mat-tab-group style="margin-top:5%;">
+            <mat-tab label="Add Student">
                 <div>
-                    <md-toolbar style="margin-top:5%;">
-                        <md-input-container>
-                            <input mdInput color="primary" placeholder="Name" [(ngModel)]="newName" />
-                        </md-input-container>
-                    </md-toolbar>
-                    <button md-raised-button color="primary" class="right" (click)="addStudent()" mdTooltip="Add Student to class">
+                    <mat-toolbar style="margin-top:5%;">
+                        <mat-input-container>
+                            <input matInput color="primary" name="newName" placeholder="Name" [(ngModel)]="newName" />
+                        </mat-input-container>
+                    </mat-toolbar>
+                    <button mat-raised-button color="primary" class="right" (click)="addStudent()" matTooltip="Add Student to class">
                         <i class="fa fa-user-plus" style="margin-right:3px;"></i>
                         Add Student</button>
                 </div>
-            </md-tab>
-            <md-tab label="Add Class">
+            </mat-tab>
+            <mat-tab label="Add Class">
                 <div>
-                    <md-toolbar style="margin-top:5%;">
-                        <md-input-container>
-                            <input mdInput color="primary" placeholder="Class Name" [(ngModel)]="newClass" />
-                        </md-input-container>
-                    </md-toolbar>
-                    <button md-raised-button color="primary" class="right" (click)="addClass()" mdTooltip="Create Class">
-                            <i class="fa fa-users" style="margin-right:3px;" aria-hidden="true"></i>
+                    <mat-toolbar style="margin-top:5%;">
+                        <mat-input-container>
+                            <input matInput color="primary" name="class name" placeholder="Class Name" [(ngModel)]="newClass" />
+                        </mat-input-container>
+                    </mat-toolbar>
+                    <button mat-raised-button color="primary" class="right" (click)="addClass()" matTooltip="Create Class">
+                        <i class="fa fa-users" style="margin-right:3px;" aria-hidden="true"></i>
                         Add Class</button>
                 </div>
-            </md-tab>
-        </md-tab-group>
+            </mat-tab>
+        </mat-tab-group>
         <div *ngIf="classes">
-            <md-radio-group style="margin-top:10%;" class="example-radio-group" [(ngModel)]="selectedClass" (change)="toggleView = 0">
-                <md-radio-button class="example-radio-button" *ngFor="let classs of classes" [value]="classs">
+            <mat-radio-group style="margin-top:10%;" class="example-radio-group" [(ngModel)]="selectedClass" (change)="toggleView = 0">
+                <mat-radio-button class="example-radio-button" *ngFor="let classs of classes" [value]="classs">
                     {{classs[0]}}
-                </md-radio-button>
-            </md-radio-group>
+                </mat-radio-button>
+            </mat-radio-group>
         </div>
     </div>
     <div class="col-6 listAndEdit" style="margin-top:10px;">
         <div *ngIf="selectedClass && selectedClass.length > 0">
-            <div *ngIf="toggleView == 0">
-                <h3><i class="fa fa-users" style="margin-right:3px;" aria-hidden="true"></i>{{selectedClass[0]}}</h3>
-                <md-card *ngFor="let listName of selectedClass[1]" class="groupCards">
+            <div *ngIf="toggleView === 0">
+                <h3>
+                    <i class="fa fa-users" style="margin-right:3px;" aria-hidden="true"></i>{{selectedClass[0]}}</h3>
+                <mat-card *ngFor="let listName of selectedClass[1]" class="groupCards">
                     <i class="fa fa-user" style="margin-right:3px;" aria-hidden="true"></i> {{listName}}
-                </md-card>
+                </mat-card>
             </div>
-            <div *ngIf="toggleView == 1">
+            <div *ngIf="toggleView === 1">
                 <i class="fa fa-users" style="margin-right:3px;" aria-hidden="true"></i>
-                <md-input-container>
-                    <input mdInput color="primary" placeholder="Class Name" [(ngModel)]="selectedClass[0]" />
-                </md-input-container>
-                <button md-mini-fab style="margin-left:10%;" (click)="saveEdits(i, editName)" mdTooltip="Save Class Name">
-                        <i class="fa fa-check"></i></button>
-                <button md-mini-fab style="margin-left:10%;" (click)="removeClass()" mdTooltip="Remove This Whole Class">X</button>
+                <mat-input-container>
+                    <input matInput color="primary" name="selected class" placeholder="Class Name" [(ngModel)]="selectedClass[0]" />
+                </mat-input-container>
+                <button mat-mini-fab style="margin-left:10%;" (click)="saveEdits(i, editName)" matTooltip="Save Class Name">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button mat-mini-fab style="margin-left:10%;" (click)="removeClass()" matTooltip="Remove This Whole Class">X</button>
                 <ul class="lists">
                     <li *ngFor="let editName of selectedClass[1]; let i = index; trackBy:trackByFn">
                         <i class="fa fa-user" style="margin-right:3px;" aria-hidden="true"></i>
-                        <md-input-container>
-                            <input mdInput color="primary" placeholder="Name" [(ngModel)]="selectedClass[1][i]" />
-                        </md-input-container>
-                        <button md-mini-fab style="margin-left:10%;" (click)="saveEdits(i, editName)" mdTooltip="Save Student">
-                            <i class="fa fa-check"></i></button>
-                        <button md-mini-fab style="margin-left:10%;" (click)="removeStudent(i)" mdTooltip="Remove This Student">X</button>
+                        <mat-input-container>
+                            <input matInput color="primary" name="Name" placeholder="Name" [(ngModel)]="selectedClass[1][i]" />
+                        </mat-input-container>
+                        <button mat-mini-fab style="margin-left:10%;" (click)="saveEdits(i, editName)" matTooltip="Save Student">
+                            <i class="fa fa-check"></i>
+                        </button>
+                        <button mat-mini-fab style="margin-left:10%;" (click)="removeStudent(i)" matTooltip="Remove This Student">X</button>
                     </li>
                 </ul>
             </div>
-            <div *ngIf="toggleView == 2">
+            <div *ngIf="toggleView === 2">
                 <div class="col-12">
                     <div class="row">
-                        <md-select placeholder="# of students grouped" [(ngModel)]="selectedRandomNum">
-                            <md-option *ngFor="let rand of groupAmount" [value]="rand">
-                                {{rand}}
-                            </md-option>
-                        </md-select>
-                        <button md-raised-button color="primary" style="margin-left:20px;" class="right" (click)="randomizeData()" mdTooltip="Shuffle the list of students">
-                                    <i class="fa fa-random"></i>
-                                    Randomize</button>
-                        <md-checkbox [(ngModel)]="skipDrumRoll" mdTooltip="Check to skip drum roll">Quick Group</md-checkbox>
+                        <form>
+                        <mat-form-field>
+                            <mat-select placeholder="# of students grouped" [(ngModel)]="selectedRandomNum" name="random">
+                                <mat-option *ngFor="let rand of groupAmount" [value]="rand">
+                                    {{rand}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </form>
+                        <button mat-raised-button color="primary" name="randomize" style="margin-left:20px;" class="right" (click)="randomizeData()" matTooltip="Shuffle the list of students">
+                            <i class="fa fa-random"></i>
+                            Randomize
+                        </button>
+                        <mat-checkbox [(ngModel)]="skipDrumRoll" matTooltip="Check to skip drum roll">Quick Group</mat-checkbox>
                     </div>
                 </div>
                 <div>
                     <div class="col-12" *ngIf="presentArray && presentArray.length > 0">
-                        <md-card *ngFor="let item of presentArray" class="groupCards">{{item}}</md-card>
+                        <mat-card *ngFor="let item of presentArray" class="groupCards">{{item}}</mat-card>
                     </div>
                 </div>
             </div>
