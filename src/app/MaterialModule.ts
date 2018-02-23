@@ -13,19 +13,20 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   imports: [
     CommonModule, MatCardModule, MatMenuModule, MatButtonModule, MatDialogModule,
     MatTooltipModule, MatToolbarModule, MatSidenavModule, MatTabsModule,
     MatSlideToggleModule, MatSnackBarModule, MatRadioModule, MatSelectModule,
-    MatInputModule
+    MatInputModule, MatCheckboxModule
   ],
   declarations: [],
   exports: [MatCardModule, MatMenuModule, MatButtonModule, MatDialogModule,
     MatTooltipModule, MatToolbarModule, MatSidenavModule, MatTabsModule,
     MatSlideToggleModule, MatSnackBarModule, MatRadioModule, MatSelectModule,
-    MatInputModule
+    MatInputModule, MatCheckboxModule
   ]
 })
 export class MaterialModule { }
